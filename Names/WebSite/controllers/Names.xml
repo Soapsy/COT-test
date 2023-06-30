@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <dataController name="Names" conflictDetection="overwriteChanges" label="Names" xmlns="urn:schemas-codeontime-com:data-aquarium">
   <commands>
-    <command id="command1" type="Text">
-      <text><![CDATA[
-select
+    <command id="command1" type="Text" custom="false">
+      <text><![CDATA[select
 	"Names"."ID" "ID"
 	,"Names"."Names" "Names"
 	,"Names"."Type" "Type"
 from "dbo"."Names" "Names"
-]]></text>
+where "Names"."Type" <> 3]]></text>
     </command>
   </commands>
   <fields>
@@ -105,4 +104,13 @@ from "dbo"."Names" "Names"
       <action id="a7" whenLastCommandName="New" commandName="Cancel" />
     </actionGroup>
   </actions>
+  <businessRules>
+    <rule id="r100" commandName="Insert|Update" type="Sql" phase="Before" name="CheckForDupes"><![CDATA[IF (EXISTS (SELECT Names FROM Names WHERE Names=@Names))
+BEGIN
+SET @BusinessRules_PreventDefault = 1
+SET @Result_Focus = 
+    'Names, The name '+ cast(@Names as nvarchar) + ' already exists.'
+END
+]]></rule>
+  </businessRules>
 </dataController>

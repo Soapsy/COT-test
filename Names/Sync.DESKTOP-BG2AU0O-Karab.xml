@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><logs><log type="Controllers">
+<?xml version="1.0" encoding="utf-8"?><logs><log type="Controllers">
   <c y="NodeSet" t="2018-08-09T20:10:53">
     <controller name="Names" />
     <copy>
@@ -23,4 +23,21 @@
     <controller name="Names1" />
     <delete />
   </c>
-</log><log type="Application" /></logs>
+<c y="NodeSet" t="2023-06-30T19:09:45"><controller name="Names" /><insert type="rule"><Type>Sql</Type><CommandName>Insert|Update</CommandName><Name>CheckForDupes</Name><Phase>Before</Phase><Script>IF (EXISTS (SELECT Names FROM Names WHERE Names=@Names))
+BEGIN
+SET @BusinessRules_PreventDefault = 1
+SET @Result_Focus = 
+    'Names, The name '+ cast(@Names as nvarchar) + ' already exists.'
+END
+</Script></insert></c><c y="NodeSet" t="2023-06-30T19:09:50"><controller name="Names" /><rule id="r100" /><update><Script>IF (EXISTS (SELECT Names FROM Names WHERE Names=@Names))
+BEGIN
+SET @BusinessRules_PreventDefault = 1
+SET @Result_Focus = 
+    'Names, The name '+ cast(@Names as nvarchar) + ' already exists.'
+END
+</Script></update></c><c y="NodeSet" t="2023-06-30T19:10:02"><controller name="Names" /><command id="command1" /><update><Custom>false</Custom><Text>select
+	"Names"."ID" "ID"
+	,"Names"."Names" "Names"
+	,"Names"."Type" "Type"
+from "dbo"."Names" "Names"
+where "Names"."Type" &lt;&gt; 3</Text></update></c></log><log type="Application" /></logs>
